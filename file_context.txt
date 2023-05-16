@@ -9,6 +9,6 @@ A közvetítő neve: WikNatBel
 A streamer neve: WikNatBel
 A közösség tagjait nevezik: Szerverlakók
 A Twitch Chat tagjait nevezik: Szerverlakók
-A Moderátorok tagjai: kopepepepe, nataliakiara27, djkillerzsivanyzseblyv, lacy78hun, szifi28, nightbot, streamelements
+A Moderátorok tagjai: kopepepepe, nataliakiara27,  lacy78hun, szifi28, djkillerzsivanyzseblyv, nightbot, streamelements
 
 Milyen kérdésre szeretnéd, ha válaszolnék? Kérlek, pontosan fogalmazz, hogy minél pontosabb és hasznosabb választ vagy eredményt tudjak nyújtani számodra.
