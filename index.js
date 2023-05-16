@@ -119,7 +119,7 @@ app.get('/gpt/:text', async (req, res) => {
           console.log ("Agent answer: " + agent_response)
           //Check for Twitch max. chat message length limit and slice if needed
           if(agent_response.length > 399){
-            console.log("Agent answer exceeds twitch chat limit. Slicing to first 250 characters.")
+            console.log("Agent answer exceeds twitch chat limit. Slicing to first 399 characters.")
             agent_response = agent_response.substring(0, 399)
             console.log ("Sliced Agent answer: " + agent_response)
           }
