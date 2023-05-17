@@ -79,6 +79,7 @@ app.get('/gpt/:text', async (req, res) => {
         top_p: 1,
         frequency_penalty: 0,
         presence_penalty: 0,
+        timeout: 5,
       });
     
       if (response.data.choices) {
@@ -112,6 +113,7 @@ app.get('/gpt/:text', async (req, res) => {
         top_p: 1,
         frequency_penalty: 0,
         presence_penalty: 0,
+        timeout: 5,
       });
       if (response.data.choices) {
         let agent_response = response.data.choices[0].text
