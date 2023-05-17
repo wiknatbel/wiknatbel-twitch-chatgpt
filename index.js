@@ -88,4 +88,7 @@ app.get('/gpt/:text', async (req, res) => {
     }
 
   } else {
-    const prompt = file_context + "\n\nQ:" + text + "\nA
+    const prompt = file_context + "\n\nQ:" + text + "\nA:";
+    console.log("User Input: " + text)
+
+    const
