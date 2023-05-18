@@ -17,7 +17,7 @@ console.log("GPT_MODE is " + GPT_MODE);
 console.log("History length is " + process.env.HISTORY_LENGTH);
 console.log("OpenAI API Key: " + process.env.OPENAI_API_KEY);
 
-app.use(express.json({ extended: true, limit: '1mb' }));
+app.use(express.json({ extended: true, limit: '1mb', timeout: 60000 }));
 
 async function readContextFile(filePath) {
   try {
@@ -49,7 +49,7 @@ async function initializeContext() {
 
 initializeContext();
 
-app.all('/gpt/:text', async (req, res) => {
+app.get('/gpt/:text', async (req, res) => {
   const text = req.params.text;
 
   const configuration = new Configuration({
@@ -102,6 +102,6 @@ app.all('/gpt/:text', async (req, res) => {
       console.log("Non-CHAT mode is not implemented yet.");
       res.status(500).send("Non-CHAT mode is not implemented yet.");
     }
- 
+  } catch
 
      
