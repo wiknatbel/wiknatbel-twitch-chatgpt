@@ -23,7 +23,7 @@ app.all('/', (req, res) => {
 
     setTimeout(() => {
         res.send('Yo!')
-    }, 1000)
+    }, 100)
 })
 
 if (process.env.GPT_MODE === "CHAT"){
