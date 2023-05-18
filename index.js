@@ -18,9 +18,8 @@ console.log("OpenAI API Key:" + process.env.OPENAI_API_KEY);
 
 app.use(express.json({ extended: true, limit: '1mb' }));
 
-app.all('/', (req, res) => {
-  console.log("Just got a request!");
-  res.send('Yo!');
+app.listen(3000, () => {
+  console.log('Server started on port 3000');
 });
 
 async function readContextFile(filePath) {
@@ -80,7 +79,7 @@ app.get('/gpt/:text', async (req, res) => {
       console.log("User Input: " + text);
 
       const response = await openai.createChatCompletion({
-        model: "gpt-3.5-turbo",
+        model: "gpt-3.5-turbo-jayden",
         messages: messages,
         temperature: 0.5,
         max_tokens: 128,
@@ -96,4 +95,11 @@ app.get('/gpt/:text', async (req, res) => {
         messages.push({ role: "assistant", content: agent_response });
 
         if (agent_response.length > 399) {
-          console.log("Agent answer exceeds twitch chat limit. Slicing to first 399 characters
+          console.log("Agent answer exceeds twitch chat limit. Slicing to first 399 characters");
+          agent_response = agent_response.slice(0, 399);
+        }
+
+        res.send(agent_response);
+      } else {
+        res.status(500).send("No response from OpenAI API.");
+     
