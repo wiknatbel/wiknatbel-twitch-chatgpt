@@ -3,7 +3,16 @@ const request = require('request')
 const app = express()
 const fs = require('fs');
 const { promisify } = require('util')
-const readFile = promisify(fs.readFile)
+onst readFile = promisify(fs.readFile);
+
+// ...
+
+try {
+  const data = await readFile("./file_context.txt", "utf8");
+  // Adatok kezelése itt
+} catch (err) {
+  console.error("Hiba a fájl beolvasása közben:", err);
+}
 const GPT_MODE = process.env.GPT_MODE
 
 let file_context = "You are a helpful Twitch Chatbot."
