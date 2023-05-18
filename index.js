@@ -18,14 +18,10 @@ console.log("OpenAI API Key:" + process.env.OPENAI_API_KEY)
 
 app.use(express.json({extended: true, limit: '1mb'}))
 
-app.all('/', (req, res, next) => {
-  console.log("Just got a request!")
-
-  setTimeout(next, 15000);
-
-}, (req, res) => {
-  res.send('Yo!');
-});
+app.all('/', (req, res) => {
+    console.log("Just got a request!")
+    res.send('Yo!')
+})
 
 if (process.env.GPT_MODE === "CHAT"){
 
