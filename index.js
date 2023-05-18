@@ -17,7 +17,7 @@ console.log("GPT_MODE is " + GPT_MODE);
 console.log("History length is " + process.env.HISTORY_LENGTH);
 console.log("OpenAI API Key: " + process.env.OPENAI_API_KEY);
 
-app.use(express.json({ extended: true, limit: '1mb', timeout: 60000 }));
+app.use(express.json({ extended: true, limit: '1mb', timeout: 10000 })); // 10 másodperc időkorlát
 
 async function readContextFile(filePath) {
   try {
