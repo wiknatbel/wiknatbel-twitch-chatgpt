@@ -1,9 +1,10 @@
 const express = require('express');
-const request = require('request');
-const app = express();
 const fs = require('fs');
 const { promisify } = require('util');
 const readFile = promisify(fs.readFile);
+const { Configuration, OpenAIApi } = require("openai");
+
+const app = express();
 const GPT_MODE = process.env.GPT_MODE;
 
 let file_context = "You are a helpful Twitch Chatbot.";
@@ -14,13 +15,9 @@ const messages = [
 
 console.log("GPT_MODE is " + GPT_MODE);
 console.log("History length is " + process.env.HISTORY_LENGTH);
-console.log("OpenAI API Key:" + process.env.OPENAI_API_KEY);
+console.log("OpenAI API Key: " + process.env.OPENAI_API_KEY);
 
 app.use(express.json({ extended: true, limit: '1mb' }));
-
-app.listen(3000, () => {
-  console.log('Server started on port 3000');
-});
 
 async function readContextFile(filePath) {
   try {
@@ -31,32 +28,29 @@ async function readContextFile(filePath) {
   }
 }
 
-if (GPT_MODE === "CHAT") {
-  readContextFile("./file_context.txt")
-    .then((data) => {
-      console.log("Reading context file and adding it as system level message for the agent.");
+async function initializeContext() {
+  try {
+    const data = await readContextFile("./file_context.txt");
+    console.log("Reading context file: " + data);
+
+    if (GPT_MODE === "CHAT") {
+      console.log("Adding context as system level message for the agent.");
       messages[0].content = data;
-    })
-    .catch((err) => {
-      console.error("Error reading context file:", err);
-      process.exit(1);
-    });
-} else {
-  readContextFile("./file_context.txt")
-    .then((data) => {
-      console.log("Reading context file and adding it in front of user prompts:");
+    } else {
+      console.log("Adding context in front of user prompts.");
       file_context = data;
       console.log(file_context);
-    })
-    .catch((err) => {
-      console.error("Error reading context file:", err);
-      process.exit(1);
-    });
+    }
+  } catch (err) {
+    console.error("Error reading context file:", err);
+    process.exit(1);
+  }
 }
 
-app.get('/gpt/:text', async (req, res) => {
+initializeContext();
+
+app.all('/gpt/:text', async (req, res) => {
   const text = req.params.text;
-  const { Configuration, OpenAIApi } = require("openai");
 
   const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
@@ -69,12 +63,12 @@ app.get('/gpt/:text', async (req, res) => {
       // CHAT MODE EXECUTION
       messages.push({ role: "user", content: text });
 
-      if (messages.length > ((process.env.HISTORY_LENGTH * 2) + 1)) {
+      if (messages.length > (parseInt(process.env.HISTORY_LENGTH) * 2 + 1)) {
         console.log('Message amount in history exceeded. Removing oldest user and agent messages.');
         messages.splice(1, 2);
       }
 
-      console.log("Messages: ");
+      console.log("Messages:");
       console.dir(messages);
       console.log("User Input: " + text);
 
@@ -88,7 +82,7 @@ app.get('/gpt/:text', async (req, res) => {
         presence_penalty: 0,
       });
 
-      if (response.data.choices) {
+      if (response.data.choices && response.data.choices.length > 0) {
         let agent_response = response.data.choices[0].message.content;
 
         console.log("Agent answer: " + agent_response);
@@ -102,4 +96,12 @@ app.get('/gpt/:text', async (req, res) => {
         res.send(agent_response);
       } else {
         res.status(500).send("No response from OpenAI API.");
+      }
+    } else {
+      // Non-CHAT MODE EXECUTION
+      console.log("Non-CHAT mode is not implemented yet.");
+      res.status(500).send("Non-CHAT mode is not implemented yet.");
+    }
+ 
+
      
