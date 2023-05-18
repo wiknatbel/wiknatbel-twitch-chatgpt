@@ -20,7 +20,10 @@ app.use(express.json({extended: true, limit: '1mb'}))
 
 app.all('/', (req, res) => {
     console.log("Just got a request!")
-    res.send('Yo!')
+
+    setTimeout(() => {
+        res.send('Yo!')
+    }, 2000)
 })
 
 if (process.env.GPT_MODE === "CHAT"){
